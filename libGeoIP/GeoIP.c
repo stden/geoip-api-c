@@ -209,6 +209,41 @@ const char GeoIP_country_continent[254][3] = {
         "NA","NA","NA"
 };
 
+const char * GeoIP_currency[254] = {
+       "",    "",    "EUR", "EUR", "AED", "AFN", "XCD", "XCD",
+       "ALL", "AMD", "ANG", "AOA", "",    "ARS", "USD", "EUR",
+       "AUD", "AWG", "AZN", "BAM", "BBD", "BDT", "EUR", "XOF",
+       "BGN", "BHD", "BIF", "XOF", "BMD", "BND", "BOB", "BRL",
+       "BSD", "BTN", "NOK", "BWP", "BYR", "BZD", "CAD", "AUD",
+       "CDF", "XFU", "XFU", "CHF", "XOF", "NZD", "CLP", "XFU",
+       "CNY", "COP", "CRC", "CUP", "CVE", "AUD", "EUR", "CZK",
+       "EUR", "DJF", "DKK", "XCD", "DOP", "DZD", "USD", "EUR",
+       "EGP", "MAD", "ERN", "EUR", "ETB", "EUR", "FJD", "FKP",
+       "USD", "DKK", "EUR", "ANG", "XFU", "GBP", "XCD", "GEL",
+       "EUR", "GHS", "GIP", "DKK", "GMD", "GNF", "EUR", "XFU",
+       "EUR", "GBP", "GTQ", "USD", "XOF", "GYD", "HKD", "AUD",
+       "HNL", "HRK", "HTG", "HUF", "IDR", "EUR", "ILS", "INR",
+       "GBP", "IQD", "IRR", "ISK", "EUR", "JMD", "JOD", "JPY",
+       "KES", "KGS", "KHR", "AUD", "KMF", "XCD", "KPW", "KRW",
+       "KWD", "KYD", "KZT", "LAK", "LBP", "XCD", "CHF", "LKR",
+       "LRD", "LSL", "LTL", "EUR", "LVL", "LYD", "MAD", "EUR",
+       "MDL", "MGA", "USD", "MKD", "XOF", "MMK", "MNT", "MOP",
+       "USD", "EUR", "MRO", "XCD", "EUR", "MUR", "MVR", "MWK",
+       "MXN", "MYR", "MZN", "NAD", "XFU", "XOF", "AUD", "NGN",
+       "NIO", "EUR", "NOK", "NPR", "AUD", "NZD", "NZD", "OMR",
+       "PAB", "PEN", "XFU", "PGK", "PHP", "PKR", "PLN", "EUR",
+       "NZD", "USD", "ILS", "EUR", "USD", "PYG", "QAR", "EUR",
+       "RON", "RUB", "RWF", "SAR", "SBD", "SCR", "SDG", "SEK",
+       "BND", "SHP", "EUR", "NOK", "EUR", "SLL", "EUR", "XOF",
+       "SOS", "SRD", "STD", "USD", "SYP", "SZL", "USD", "XFU",
+       "EUR", "XOF", "THB", "TJS", "NZD", "TMT", "TND", "TOP",
+       "USD", "TRY", "TTD", "AUD", "TWD", "TZS", "UAH", "UGX",
+       "",    "USD", "UYU", "UZS", "EUR", "XCD", "VEF", "USD",
+       "USD", "VND", "VUV", "XFU", "WST", "YER", "EUR", "RSD",
+       "ZAR", "ZMK", "EUR", "ZWL", "",    "",    "",    "EUR",
+       "GGP", "GBP", "JEP", "EUR", "EUR", "USD"
+};
+
 geoipv6_t _GeoIP_lookupaddress_v6 (const char *host);
    
 #if defined(_WIN32)
@@ -1924,6 +1959,16 @@ int GeoIP_id_by_code(const char *country)
        }
 
        return 0;
+}
+
+const char * GeoIP_currency_by_id( int id ){
+  if ( id < 1 || id >= (int ) num_GeoIP_countries )
+    return "";
+  return GeoIP_currency[id];
+}
+const char * GeoIP_currency_by_code( const char * country_code ){
+  int id = GeoIP_id_by_code(country_code);
+  return GeoIP_currency_by_id(id);
 }
 
 unsigned GeoIP_num_countries(void)
