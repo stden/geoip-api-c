@@ -446,6 +446,7 @@ void _GeoIP_setup_dbfilename() {
 		GeoIPDBFileName[GEOIP_CITY_EDITION_REV1_V6]	= _GeoIP_full_path_to("GeoIPCityv6.dat");
 		GeoIPDBFileName[GEOIP_NETSPEED_EDITION_REV1]	= _GeoIP_full_path_to("GeoIPNetSpeedCell.dat");
 		GeoIPDBFileName[GEOIP_NETSPEED_EDITION_REV1_V6]	= _GeoIP_full_path_to("GeoIPNetSpeedCellv6.dat");
+                GeoIPDBFileName[GEOIP_ACCURACYRADIUS_EDITION_V6] = _GeoIP_full_path_to("GeoIPDistancev6.dat");
 	  }
 }
 
@@ -559,6 +560,7 @@ void _setup_segments(GeoIP * gi) {
 			  	   gi->databaseType == GEOIP_NETSPEED_EDITION_REV1_V6 ||
 			  	   gi->databaseType == GEOIP_LOCATIONA_EDITION ||
 			  	   gi->databaseType == GEOIP_ACCURACYRADIUS_EDITION ||
+                                   gi->databaseType == GEOIP_ACCURACYRADIUS_EDITION_V6 ||
 			  	   gi->databaseType == GEOIP_CITYCONFIDENCE_EDITION ||
                                    gi->databaseType == GEOIP_CITYCONFIDENCEDIST_EDITION ||
                                    gi->databaseType == GEOIP_CITY_EDITION_REV0_V6 ||
@@ -1625,6 +1627,7 @@ char *_get_name (GeoIP* gi, unsigned long ipnum) {
 			gi->databaseType != GEOIP_ISP_EDITION &&
 			gi->databaseType != GEOIP_DOMAIN_EDITION &&
 			gi->databaseType != GEOIP_ASNUM_EDITION &&
+			gi->databaseType != GEOIP_ACCURACYRADIUS_EDITION &&
 			gi->databaseType != GEOIP_NETSPEED_EDITION_REV1 &&
 			gi->databaseType != GEOIP_USERTYPE_EDITION &&
 			gi->databaseType != GEOIP_REGISTRAR_EDITION &&
@@ -1675,6 +1678,7 @@ char *_get_name_v6 (GeoIP* gi, geoipv6_t ipnum) {
       gi->databaseType != GEOIP_ISP_EDITION_V6 &&
       gi->databaseType != GEOIP_DOMAIN_EDITION_V6 &&
       gi->databaseType != GEOIP_ASNUM_EDITION_V6 &&
+      gi->databaseType != GEOIP_ACCURACYRADIUS_EDITION_V6 &&
       gi->databaseType != GEOIP_NETSPEED_EDITION_REV1_V6 &&
       gi->databaseType != GEOIP_USERTYPE_EDITION_V6 &&
       gi->databaseType != GEOIP_REGISTRAR_EDITION_V6 &&
