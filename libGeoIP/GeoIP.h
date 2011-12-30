@@ -304,7 +304,7 @@ GEOIP_API int GeoIP_cleanup(void);
 /* Returns the library version in use. Helpful if your loading dynamically. */
 GEOIP_API const char * GeoIP_lib_version(void);
 
-/* 1.4.9 */
+/* 1.5.0 */
 GEOIP_API const char * GeoIP_currency_by_id(int);
 GEOIP_API const char * GeoIP_currency_by_code(const char *);
 
