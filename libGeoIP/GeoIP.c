@@ -1031,7 +1031,7 @@ GeoIP* GeoIP_open (const char * filename, int flags) {
 			gi->cache = NULL;
 		}
 		gi->flags = flags;
-		gi->charset = GEOIP_CHARSET_ISO_8859_1;
+		gi->charset = GEOIP_CHARSET_UTF8;
                 gi->ext_flags = 1U << GEOIP_TEREDO_BIT;
 		_setup_segments(gi);
 		if (flags & GEOIP_INDEX_CACHE) {                        

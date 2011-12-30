@@ -1,6 +1,7 @@
 1.5.0
 	* Add new functions GeoIP_currency_by_id and GeoIP_currency_by_code
 	  ( Boris Zentner )
+	* Make UTF8 the default output charset ( Boris Zentner )
 	* Add GEOIP_ACCURACYRADIUS_EDITION and GEOIP_ACCURACYRADIUS_EDITION_V6
 	  ( Boris Zentner )
 	* Add more database types GEOIP_COUNTRYCONF_EDITION,
