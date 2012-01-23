@@ -747,7 +747,7 @@ int _check_mtime(GeoIP *gi) {
 }
 
 #define ADDR_STR_LEN (8 * 4 + 7 + 1) 
-unsigned int _GeoIP_seek_record_v6 (GeoIP *gi, geoipv6_t ipnum) {
+unsigned int _GeoIP_seek_record_v6_gl (GeoIP *gi, geoipv6_t ipnum, GeoIPLookup * gl) {
        int depth;
        char paddr[ADDR_STR_LEN];
        unsigned int x;
@@ -812,7 +812,7 @@ unsigned int _GeoIP_seek_record_v6 (GeoIP *gi, geoipv6_t ipnum) {
                }
 
                if (x >= gi->databaseSegments[0]) {
-                       gi->netmask = 128 - depth;
+                       gi->netmask = gl->netmask = 128 - depth;
                        return x;
                }
                offset = x;
@@ -824,6 +824,11 @@ unsigned int _GeoIP_seek_record_v6 (GeoIP *gi, geoipv6_t ipnum) {
        return 0;
 }
 
+unsigned int _GeoIP_seek_record_v6 (GeoIP *gi, geoipv6_t ipnum) {
+  GeoIPLookup gl;
+  return _GeoIP_seek_record_v6_gl(gi, ipnum, &gl);
+}
+
 geoipv6_t
 _GeoIP_addr_to_num_v6(const char *addr)
 {
@@ -833,7 +838,8 @@ _GeoIP_addr_to_num_v6(const char *addr)
        return IPV6_NULL;
 }
 
-unsigned int _GeoIP_seek_record (GeoIP *gi, unsigned long ipnum) {
+
+unsigned int _GeoIP_seek_record_gl (GeoIP *gi, unsigned long ipnum, GeoIPLookup *gl) {
 	int depth;
 	unsigned int x;
 	unsigned char stack_buffer[2 * MAX_RECORD_LENGTH];
@@ -895,7 +901,7 @@ unsigned int _GeoIP_seek_record (GeoIP *gi, unsigned long ipnum) {
 		}
 
 		if (x >= gi->databaseSegments[0]) {
-			gi->netmask = 32 - depth;
+			gi->netmask = gl->netmask = 32 - depth;
 			return x;
 		}
 		offset = x;
@@ -903,6 +909,11 @@ unsigned int _GeoIP_seek_record (GeoIP *gi, unsigned long ipnum) {
 	/* shouldn't reach here */
 	fprintf(stderr,"Error Traversing Database for ipnum = %lu - Perhaps database is corrupt?\n",ipnum);
 	return 0;
+}
+
+unsigned int _GeoIP_seek_record (GeoIP *gi, unsigned long ipnum) {
+  GeoIPLookup gl;
+  return _GeoIP_seek_record_gl(gi, ipnum, &gl );
 }
 
 unsigned long
@@ -1185,7 +1196,7 @@ _GeoIP_lookupaddress_v6(const char *host)
   return ipnum;
 }
 
-int GeoIP_id_by_name (GeoIP* gi, const char *name) {
+int GeoIP_id_by_name_gl (GeoIP* gi, const char *name, GeoIPLookup *gl ) {
 	unsigned long ipnum;
 	int ret;
 	if (name == NULL) {
@@ -1199,7 +1210,11 @@ int GeoIP_id_by_name (GeoIP* gi, const char *name) {
 		return 0;
 	ret = _GeoIP_seek_record(gi, ipnum) - gi->databaseSegments[0];
 	return ret;
+}
 
+int GeoIP_id_by_name (GeoIP* gi, const char *name) {
+  GeoIPLookup n;
+  return GeoIP_id_by_name_gl(gi, name, &n);
 }
 
 int GeoIP_id_by_name_v6 (GeoIP* gi, const char *name) {
@@ -1759,7 +1774,7 @@ char * GeoIP_num_to_addr (unsigned long ipnum) {
 	return ret_str;
 }
 
-char **GeoIP_range_by_ip (GeoIP* gi, const char *addr) {
+char **GeoIP_range_by_ip_gl (GeoIP* gi, const char *addr, GeoIPLookup * gl) {
 	unsigned long ipnum;
 	unsigned long left_seek;
 	unsigned long right_seek;
@@ -1767,7 +1782,8 @@ char **GeoIP_range_by_ip (GeoIP* gi, const char *addr) {
 	int orig_netmask;
 	int target_value;
 	char **ret;
-	
+	GeoIPLookup t;
+
 	if (addr == NULL) {
 		return 0;
 	}
@@ -1775,26 +1791,26 @@ char **GeoIP_range_by_ip (GeoIP* gi, const char *addr) {
 	ret = malloc(sizeof(char *) * 2);
 
 	ipnum = GeoIP_addr_to_num(addr);
-	target_value = _GeoIP_seek_record(gi, ipnum);
-	orig_netmask = GeoIP_last_netmask(gi);
+	target_value = _GeoIP_seek_record_gl(gi, ipnum, gl);
+	orig_netmask = gl->netmask;
 	mask = 0xffffffff << ( 32 - orig_netmask );	
 	left_seek = ipnum & mask;
 	right_seek = left_seek + ( 0xffffffff & ~mask );
 
 	while (left_seek != 0 
-	  && target_value == _GeoIP_seek_record(gi, left_seek - 1) ) {
+	  && target_value == _GeoIP_seek_record_gl(gi, left_seek - 1, &t) ) {
 		
 		/* Go to beginning of netblock defined by netmask */
-		mask = 0xffffffff << ( 32 - GeoIP_last_netmask(gi) );
+		mask = 0xffffffff << ( 32 - t.netmask );
 		left_seek = ( left_seek - 1 ) & mask;
 	}
 	ret[0] = GeoIP_num_to_addr(left_seek);
 
 	while (right_seek != 0xffffffff
-	  && target_value == _GeoIP_seek_record(gi, right_seek + 1) ) {
+	  && target_value == _GeoIP_seek_record_gl(gi, right_seek + 1, &t) ) {
 		
 		/* Go to end of netblock defined by netmask */
-		mask = 0xffffffff << ( 32 - GeoIP_last_netmask(gi) );
+		mask = 0xffffffff << ( 32 - t.netmask );
 		right_seek = ( right_seek + 1 ) & mask;
 		right_seek += 0xffffffff & ~mask;
 	}
@@ -1803,6 +1819,10 @@ char **GeoIP_range_by_ip (GeoIP* gi, const char *addr) {
 	gi->netmask = orig_netmask;
 
 	return ret;
+}
+char **GeoIP_range_by_ip (GeoIP* gi, const char *addr) {
+        GeoIPLookup gl;
+	return GeoIP_range_by_ip_gl(gi, addr, &gl );
 }
 
 void GeoIP_range_by_ip_delete( char ** ptr ){
