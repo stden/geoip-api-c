@@ -187,7 +187,7 @@ _extract_record(GeoIP * gi, unsigned int seek_record, int *next_record_ptr)
   while (record_buf[str_length] != '\0')
     str_length++;
   if (str_length > 0) {
-    if (gi->charset == GEOIP_CHARSET_UTF8) {
+    if (gi->origin_charset == GEOIP_CHARSET_ISO_8859_1 && gi->charset == GEOIP_CHARSET_UTF8) {
       record->city = _GeoIP_iso_8859_1__utf8((const char *) record_buf);
     }
     else {
@@ -222,7 +222,10 @@ _extract_record(GeoIP * gi, unsigned int seek_record, int *next_record_ptr)
    * get area code and metro code for post April 2002 databases and for US
    * locations
    */
-  if (GEOIP_CITY_EDITION_REV1 == gi->databaseType
+  if (GEOIP_CITY_EDITION_REV1            == gi->databaseType
+      || GEOIP_CITY_EDITION_REV1_V6      == gi->databaseType
+      || GEOIP_CITY_EDITION_REV1_UTF8    == gi->databaseType
+      || GEOIP_CITY_EDITION_REV1_UTF8_V6 == gi->databaseType
       || GEOIP_CITYCONFIDENCE_EDITION == gi->databaseType) {
     if (!strcmp(record->country_code, "US")) {
       record_buf += 3;
@@ -251,6 +254,7 @@ _get_record_gl(GeoIP * gi, unsigned long ipnum, GeoIPLookup * gl)
   GeoIPRecord * r;
   if (gi->databaseType != GEOIP_CITY_EDITION_REV0
       && gi->databaseType != GEOIP_CITY_EDITION_REV1
+      && gi->databaseType != GEOIP_CITY_EDITION_REV1_UTF8
       && gi->databaseType != GEOIP_CITYCONFIDENCE_EDITION
       && gi->databaseType != GEOIP_CITYCONFIDENCEDIST_EDITION) {
     printf("Invalid database type %s, expected %s\n", GeoIPDBDescription[(int) gi->databaseType], GeoIPDBDescription[GEOIP_CITY_EDITION_REV1]);
@@ -278,8 +282,9 @@ _get_record_v6_gl(GeoIP * gi, geoipv6_t ipnum, GeoIPLookup * gl)
 {
   unsigned int    seek_record;
   GeoIPRecord *r;
-  if (gi->databaseType != GEOIP_CITY_EDITION_REV0_V6 &&
-      gi->databaseType != GEOIP_CITY_EDITION_REV1_V6) {
+  if (gi->databaseType != GEOIP_CITY_EDITION_REV0_V6
+      && gi->databaseType != GEOIP_CITY_EDITION_REV1_UTF8_V6
+      && gi->databaseType != GEOIP_CITY_EDITION_REV1_V6) {
     printf("Invalid database type %s, expected %s\n", GeoIPDBDescription[(int) gi->databaseType], GeoIPDBDescription[GEOIP_CITY_EDITION_REV1_V6]);
     return NULL;
   }
@@ -360,8 +365,9 @@ int
 GeoIP_record_id_by_addr(GeoIP * gi, const char *addr)
 {
   unsigned long   ipnum;
-  if (gi->databaseType != GEOIP_CITY_EDITION_REV0 &&
-      gi->databaseType != GEOIP_CITY_EDITION_REV1) {
+  if (gi->databaseType != GEOIP_CITY_EDITION_REV0
+      && gi->databaseType != GEOIP_CITY_EDITION_REV1
+      && gi->databaseType != GEOIP_CITY_EDITION_REV1_UTF8) {
     printf("Invalid database type %s, expected %s\n", GeoIPDBDescription[(int) gi->databaseType], GeoIPDBDescription[GEOIP_CITY_EDITION_REV1]);
     return 0;
   }
@@ -376,8 +382,9 @@ int
 GeoIP_record_id_by_addr_v6(GeoIP * gi, const char *addr)
 {
   geoipv6_t       ipnum;
-  if (gi->databaseType != GEOIP_CITY_EDITION_REV0_V6 &&
-      gi->databaseType != GEOIP_CITY_EDITION_REV1_V6) {
+  if (gi->databaseType != GEOIP_CITY_EDITION_REV0_V6
+      && gi->databaseType != GEOIP_CITY_EDITION_REV1_UTF8_V6
+      && gi->databaseType != GEOIP_CITY_EDITION_REV1_V6) {
     printf("Invalid database type %s, expected %s\n", GeoIPDBDescription[(int) gi->databaseType], GeoIPDBDescription[GEOIP_CITY_EDITION_REV1]);
     return 0;
   }

@@ -50,7 +50,7 @@ extern "C" {
 #define STANDARD_RECORD_LENGTH 3
 #define ORG_RECORD_LENGTH 4
 #define MAX_RECORD_LENGTH 4
-#define NUM_DB_TYPES (38+1)
+#define NUM_DB_TYPES (40+1)
 
 /* 128 bit address in network order */
 typedef struct in6_addr geoipv6_t;
@@ -74,6 +74,7 @@ typedef struct GeoIPTag {
 	time_t last_mtime_check;
         off_t dyn_seg_size; /* currently only used by the cityconfidence database */
         unsigned int ext_flags; /* bit 0 teredo support enabled */
+        int origin_charset;  /* 0 iso-8859-1 1 utf8 */
 } GeoIP;
 
 typedef struct GeoIPLookup {
@@ -121,8 +122,8 @@ typedef enum {
         GEOIP_CITYCONFIDENCEDIST_EDITION   = 16,
         GEOIP_LARGE_COUNTRY_EDITION = 17,
         GEOIP_LARGE_COUNTRY_EDITION_V6 = 18,
-        GEOIP_CITYCONFIDENCEDIST_ISP_ORG_EDITION = 19, /* unsued, but gaps are not allowed */
-        GEOIP_CCM_COUNTRY_EDITION =20,  /* unsued, but gaps are not allowed */
+        GEOIP_CITYCONFIDENCEDIST_ISP_ORG_EDITION = 19, /* unused, but gaps are not allowed */
+        GEOIP_CCM_COUNTRY_EDITION =20,  /* unused, but gaps are not allowed */
         GEOIP_ASNUM_EDITION_V6         = 21,
         GEOIP_ISP_EDITION_V6           = 22,
         GEOIP_ORG_EDITION_V6           = 23,
@@ -140,7 +141,10 @@ typedef enum {
         GEOIP_CITYCONF_EDITION         = 35,
         GEOIP_REGIONCONF_EDITION       = 36,
         GEOIP_POSTALCONF_EDITION       = 37,
-        GEOIP_ACCURACYRADIUS_EDITION_V6 = 38
+        GEOIP_ACCURACYRADIUS_EDITION_V6 = 38,
+        GEOIP_CITY_EDITION_REV1_UTF8    = 39,
+        GEOIP_CITY_EDITION_REV1_UTF8_V6 = 40
+
 } GeoIPDBTypes;
 
 typedef enum {
@@ -278,6 +282,7 @@ GEOIP_API unsigned GeoIP_num_countries(void);
 GEOIP_API char *GeoIP_database_info (GeoIP* gi);
 GEOIP_API unsigned char GeoIP_database_edition (GeoIP* gi);
 
+GEOIP_API int GeoIP_origin_charset (GeoIP* gi);
 GEOIP_API int GeoIP_charset (GeoIP* gi);
 GEOIP_API int GeoIP_set_charset (GeoIP* gi, int charset);
 GEOIP_API int GeoIP_enable_teredo (GeoIP* gi, int true_false );
