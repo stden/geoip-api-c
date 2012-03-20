@@ -23,7 +23,7 @@ AC_CHECK_HEADERS(zlib.h, , AC_MSG_ERROR(Zlib header (zlib.h) not found. You requ
 #AC_CHECK_HEADERS(lzma.h, , AC_MSG_ERROR(liblzma header (lzma.h) not found. You require liblzma to build. You may need to install a xz development package.))
 
 AC_CHECK_FUNC(lzma_code, AC_DEFINE(HAVE_XZ),
-	AC_CHECK_LIB(, lzma_code, AC_DEFINE(HAVE_XZ)
+	AC_CHECK_LIB(lzma, lzma_code, AC_DEFINE(HAVE_XZ)
 	LIBS="${LIBS} -llzma"))
 
 AC_CHECK_FUNC(gettimeofday, AC_DEFINE(HAVE_GETTIMEOFDAY))
