@@ -4,7 +4,7 @@ EXTRA_DIST = Makefile.vc md5.h global.h types.h GeoIP_internal.h
 
 AM_CPPFLAGS = -DGEOIPDATADIR=\"$(pkgdatadir)\" -Wall
 
-libGeoIP_la_SOURCES = GeoIP.c GeoIPCity.c regionName.c timeZone.c
+libGeoIP_la_SOURCES = GeoIP.c GeoIPCity.c regionName.c timeZone.c xz_pipe_decomp.c
 include_HEADERS = GeoIP.h GeoIPCity.h GeoIPUpdate.h
 
 libGeoIPUpdate_la_SOURCES = GeoIPUpdate.c md5.c
