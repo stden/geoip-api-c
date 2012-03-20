@@ -7,4 +7,5 @@ aclocal \
 && automake -i --gnu --add-missing \
 && autoconf
 
+# os x users might use glibtoolize -f
 libtoolize -f
