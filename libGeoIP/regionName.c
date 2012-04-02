@@ -1033,6 +1033,12 @@ const char * GeoIP_region_name_by_code(const char * country_code,const char * re
       case 12:
       name = "Vlaams-Brabant";
       break;
+      case 13:
+      name = "Flanders";
+      break;
+      case 14:
+      name = "Wallonia";
+      break;
     }
   }
   if (strcmp(country_code,"BF") == 0) {
@@ -5826,29 +5832,38 @@ const char * GeoIP_region_name_by_code(const char * country_code,const char * re
       case 2:
       name = "Al Balqa'";
       break;
-      case 7:
-      name = "Ma";
-      break;
       case 9:
       name = "Al Karak";
-      break;
-      case 10:
-      name = "Al Mafraq";
-      break;
-      case 11:
-      name = "Amman Governorate";
       break;
       case 12:
       name = "At Tafilah";
       break;
-      case 13:
-      name = "Az Zarqa";
-      break;
-      case 14:
-      name = "Irbid";
+      case 15:
+      name = "Al Mafraq";
       break;
       case 16:
       name = "Amman";
+      break;
+      case 17:
+      name = "Az Zaraqa";
+      break;
+      case 18:
+      name = "Irbid";
+      break;
+      case 19:
+      name = "Ma'an";
+      break;
+      case 20:
+      name = "Ajlun";
+      break;
+      case 21:
+      name = "Al Aqabah";
+      break;
+      case 22:
+      name = "Jarash";
+      break;
+      case 23:
+      name = "Madaba";
       break;
     }
   }
@@ -7117,6 +7132,9 @@ const char * GeoIP_region_name_by_code(const char * country_code,const char * re
       break;
       case 81:
       name = "Ocnita";
+      break;
+      case 82:
+      name = "Orhei";
       break;
       case 83:
       name = "Rezina";
@@ -9987,8 +10005,11 @@ const char * GeoIP_region_name_by_code(const char * country_code,const char * re
       case 91:
       name = "Krasnoyarskiy Kray";
       break;
-      case 942:
-      name = "Chechnya Republic";
+      case 92:
+      name = "Kamchatskiy Kray";
+      break;
+      case 93:
+      name = "Zabaykal'skiy Kray";
       break;
     }
   }
