@@ -2280,15 +2280,6 @@ const char * GeoIP_region_name_by_code(const char * country_code,const char * re
       case 4:
       name = "Atlantico";
       break;
-      case 5:
-      name = "Bolivar Department";
-      break;
-      case 6:
-      name = "Boyaca Department";
-      break;
-      case 7:
-      name = "Caldas Department";
-      break;
       case 8:
       name = "Caqueta";
       break;
@@ -2315,9 +2306,6 @@ const char * GeoIP_region_name_by_code(const char * country_code,const char * re
       break;
       case 17:
       name = "La Guajira";
-      break;
-      case 18:
-      name = "Magdalena Department";
       break;
       case 19:
       name = "Meta";
