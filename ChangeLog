@@ -1,3 +1,4 @@
+	* Make the API thread safe. ( Boris Zentner )
 	* Upd FIPS codes 20121010 ( Boris Zentner )
 	* bootstrap rebuilds ltmain.sh ( Boris Zentner )
 	* Update README.OSX for Lion ( Boris Zentner )

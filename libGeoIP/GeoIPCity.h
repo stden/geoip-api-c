@@ -49,6 +49,7 @@ typedef struct GeoIPRecordTag {
         /* confidence factor for Country/Region/City/Postal */
         unsigned char country_conf, region_conf, city_conf, postal_conf;
         int accuracy_radius;
+        int netmask;
 } GeoIPRecord;
 
 GeoIPRecord * GeoIP_record_by_ipnum (GeoIP* gi, unsigned long ipnum);
