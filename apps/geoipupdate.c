@@ -57,7 +57,7 @@ void print_status (int err, char * license_file) {
 	if (err == GEOIP_NO_NEW_UPDATES) {
 		fprintf(stdout,"GeoIP Database up to date\n");
 	} else if (err == GEOIP_LICENSE_KEY_INVALID_ERR) {
-		fprintf(stderr,"Invalid License Key in %s - Please visit http://www.maxmind.com/app/products for a subscription\n",license_file);
+		fprintf(stderr,"Invalid License Key in %s - Please visit http://www.maxmind.com/en/products for a subscription\n",license_file);
 	} else if (err == GEOIP_USER_ID_INVALID_ERR){
 		fprintf(stderr,"Invalid UserID\n");
 	} else if (err == GEOIP_PRODUCT_ID_INVALID_ERR){
