@@ -22,8 +22,8 @@ ARCHIVE	= $(DISTDIR).zip
 # Edit the vars below to change EXE target settings.
 TARGETS	:= $(patsubst apps/%.c,%.exe,$(wildcard apps/*.c))
 DESCR	= $(subst .rc,,$(notdir $@)) $(GEOIP_VERSION_STR)
-COMPANY	= MaxMind LLC
-COPYR	= © 2003-2006 MaxMind LLC  All Rights Reserved.
+COMPANY	= MaxMind, Inc.
+COPYR	= © 2003-2006 MaxMind, Inc. All Rights Reserved.
 WWWURL	= http://www.maxmind.com/app/c
 LICENSE	= Licensed under LGPL
 ICON 	= geoip.ico
