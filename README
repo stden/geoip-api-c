@@ -5,7 +5,7 @@
 
 geoipupdate may be used to download our free databases.
 
-Put this into the config file /usr/local/share/GeoIP.conf
+Put this into the config file /usr/local/etc/GeoIP.conf
 to download the free GeoLite databases GeoLiteCountry, GeoLiteCity and GeoLiteASNum
 
 LicenseKey 000000000000
