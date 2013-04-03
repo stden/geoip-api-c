@@ -704,6 +704,13 @@ int _check_mtime(GeoIP *gi) {
 					fprintf(stderr, "Error reading file %s -- corrupt\n", gi->file_path);
 					return -1;
 				}
+
+                                /* make sure the index is <= file size */
+				if ( gi->databaseSegments[0] * (long)gi->record_length * 2 >  buf.st_size ){
+					fprintf(stderr, "Error file %s -- corrupt\n", gi->file_path);
+					return -1;
+				}
+
 				if (gi->flags & GEOIP_INDEX_CACHE) {                        
 					gi->index_cache = (unsigned char *) realloc(gi->index_cache, sizeof(unsigned char) * ((gi->databaseSegments[0] * (long)gi->record_length * 2)));
 					if (gi->index_cache != NULL) {
@@ -1026,6 +1033,24 @@ GeoIP* GeoIP_open (const char * filename, int flags) {
 		gi->charset = GEOIP_CHARSET_ISO_8859_1;
                 gi->ext_flags = 1U << GEOIP_TEREDO_BIT;
 		_setup_segments(gi);
+
+                /* make sure the index is <= file size */
+	        if ( gi->databaseSegments[0] * (long)gi->record_length * 2 >  buf.st_size ){
+		        fprintf(stderr, "Error file %s -- corrupt\n", gi->file_path);
+			if (flags & GEOIP_MEMORY_CACHE)
+				free(gi->cache);
+			if ( flags & GEOIP_MMAP_CACHE) {
+#if !defined(_WIN32)
+			        /* MMAP is only avail on UNIX */
+				munmap(gi->cache, gi->size);
+				gi->cache = NULL;
+#endif
+			}
+			free(gi->file_path);
+                        free(gi);
+                        return NULL;
+	        }
+
 		if (flags & GEOIP_INDEX_CACHE) {                        
 			gi->index_cache = (unsigned char *) malloc(sizeof(unsigned char) * ((gi->databaseSegments[0] * (long)gi->record_length * 2)));
 			if (gi->index_cache != NULL) {
