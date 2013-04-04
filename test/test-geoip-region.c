@@ -87,7 +87,7 @@ int main()
         if (gir != NULL) {
             time_zone =
                 GeoIP_time_zone_by_country_and_region(gir->country_code,
-                                                  gir->region);
+                                                      gir->region);
             printf("%s, %s, %s, %s\n",
                    gir->country_code,
                    (!gir->region[0]) ? "N/A" : gir->region,
